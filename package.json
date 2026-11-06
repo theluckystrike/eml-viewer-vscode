@@ -1,0 +1,191 @@
+{
+  "name": "eml-viewer",
+  "displayName": "EML Viewer & MBOX Email Viewer",
+  "description": "Open .eml, .emlx and .mbox email files in VS Code: HTML with remote images blocked, attachments, SPF/DKIM/DMARC results and the delivery route. Offline.",
+  "version": "0.1.0",
+  "publisher": "zovo",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#13294B",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=18"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "eml",
+    "mbox",
+    "eml viewer",
+    "email viewer",
+    "email preview",
+    "mbox viewer",
+    "emlx",
+    "mbx",
+    "email",
+    "mail",
+    "mime",
+    "rfc822",
+    "email headers",
+    "spf",
+    "dkim",
+    "dmarc",
+    "authentication-results",
+    "received headers",
+    "email forensics",
+    "phishing",
+    "attachments",
+    "html email",
+    "newsletter",
+    "thunderbird",
+    "apple mail",
+    "gmail takeout",
+    "outlook",
+    "remote images",
+    "privacy",
+    "offline"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "emlViewer.preview",
+        "displayName": "EML Viewer",
+        "selector": [
+          {
+            "filenamePattern": "*.eml"
+          },
+          {
+            "filenamePattern": "*.emlx"
+          },
+          {
+            "filenamePattern": "*.mbox"
+          },
+          {
+            "filenamePattern": "*.mbx"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "commands": [
+      {
+        "command": "emlViewer.openWalkthrough",
+        "title": "Get Started",
+        "category": "EML Viewer"
+      },
+      {
+        "command": "emlViewer.openWith",
+        "title": "Open in EML Viewer",
+        "category": "EML Viewer"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "emlViewer.openWith",
+          "when": "resourceExtname =~ /\\.(eml|emlx|mbox|mbx|msg822|mail)$/i || resourceFilename =~ /^(Inbox|Sent|Drafts|Archive|Trash)$/",
+          "group": "navigation@9"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "emlViewer.openWith",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "EML Viewer",
+      "properties": {
+        "emlViewer.maxMessageMB": {
+          "type": "number",
+          "default": 200,
+          "minimum": 1,
+          "maximum": 2048,
+          "description": "Largest single message (an .eml file or one message of a mailbox) that is parsed, in MB. Mailbox files can be up to 4 GB."
+        },
+        "emlViewer.alwaysShowRemoteImages": {
+          "type": "boolean",
+          "default": false,
+          "description": "Load remote images in HTML messages without asking. Off by default: a remote image can tell the sender that you opened the message."
+        },
+        "emlViewer.askForRating": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask one time for a Marketplace rating after you have used EML Viewer for a few days. You can answer \"Later\" or \"Don't ask again\". Nothing is sent anywhere."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "emlViewer.start",
+        "title": "Get started with EML Viewer",
+        "description": "Read saved email and mailbox files in VS Code, offline.",
+        "steps": [
+          {
+            "id": "open",
+            "title": "Open an email file",
+            "description": "Click a .eml, .emlx, .mbox or .mbx file in the Explorer. HTML mail opens with remote images blocked.\n[Find an email file](command:workbench.action.quickOpen?%5B%22.eml%22%5D)",
+            "media": {
+              "image": "images/newsletter.png",
+              "altText": "A newsletter .eml in EML Viewer with the header card, SPF, DKIM and DMARC badges and the HTML body."
+            },
+            "completionEvents": [
+              "onCommand:workbench.action.quickOpen"
+            ]
+          },
+          {
+            "id": "auth",
+            "title": "Check SPF, DKIM, DMARC and the route",
+            "description": "The Authentication tab lists the results the receiving server recorded. The Route tab shows each Received hop with its delay.",
+            "media": {
+              "markdown": "walkthrough/auth.md"
+            }
+          },
+          {
+            "id": "mbox",
+            "title": "Browse a mailbox",
+            "description": "A .mbox file opens as a list you can search and sort. Pick a message to read it in the same view.\n[Open settings](command:workbench.action.openSettings?%5B%22emlViewer%22%5D)",
+            "media": {
+              "markdown": "walkthrough/mbox.md"
+            },
+            "completionEvents": [
+              "onCommand:workbench.action.openSettings"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build.js --production",
+    "test": "node scripts/build.js --production && node --test \"test/*.test.js\"",
+    "samples": "node scripts/make-samples.js samples",
+    "package": "npm run build && npx -y @vscode/vsce package --no-dependencies -o dist/"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "postal-mime": "4.2.0"
+  },
+  "homepage": "https://github.com/theluckystrike/eml-viewer-vscode#readme",
+  "bugs": {
+    "url": "https://github.com/theluckystrike/eml-viewer-vscode/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/eml-viewer-vscode"
+  }
+}

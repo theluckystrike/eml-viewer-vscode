@@ -1,0 +1,17 @@
+src/**
+test/**
+scripts/**
+samples/**
+node_modules/**
+e2e-tmp/**
+**/*.map
+icon.svg
+.gitignore
+dist/*.vsix
+*.vsix
+package-lock.json
+images/mbox-inbox.png
+images/auth-spf-fail.png
+images/route-hops.png
+images/light-theme.png
+images/unsafe-html.png

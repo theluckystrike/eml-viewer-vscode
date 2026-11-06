@@ -7,6 +7,7 @@ const { indexMbox, unwrapMessage, unwrapEmlx, queryIndex } = require('./core/mbo
 const { parseMessage } = require('./core/message');
 const { validateWebviewMessage, sizePlan, fmtSize, kindOf, pageRows, MB } = require('./core/protocol');
 const { createRatingPrompt } = require('./rate');
+const { registerSupport, commandUris, showLinks } = require('./support');
 
 const VIEW_TYPE = 'emlViewer.preview';
 let rating = { success() {} };
@@ -28,7 +29,10 @@ class EmlEditorProvider {
     const uri = document.uri;
     const dist = vscode.Uri.joinPath(ctx.extensionUri, 'dist');
     const media = vscode.Uri.joinPath(ctx.extensionUri, 'media');
-    panel.webview.options = { enableScripts: true, localResourceRoots: [dist, media] };
+    // Command links are limited to the two support commands and the settings page (footer "Hide" link).
+    // Message HTML cannot reach them: the sanitizer drops every href that is not http, https, mailto or #, and the
+    // sandboxed message iframe cancels every link click and forwards only http, https and mailto to openLink.
+    panel.webview.options = { enableScripts: true, localResourceRoots: [dist, media], enableCommandUris: commandUris('emlViewer') };
     const name = path.posix.basename(uri.path);
     let kind = kindOf(name);
     const st = { remote: settings().remoteImages, ui: null, current: null, entries: null, indexDone: false, indexing: null, atts: [], cache: null, disposed: false, counted: false, abort: { aborted: false }, size: 0 };
@@ -39,6 +43,7 @@ class EmlEditorProvider {
         styleUri: panel.webview.asWebviewUri(vscode.Uri.joinPath(media, 'webview.css')).toString(),
         title: name,
         remoteImages: st.remote,
+        showSupportLinks: showLinks(vscode, 'emlViewer'),
       });
     };
     const post = m => (st.disposed ? Promise.resolve(false) : panel.webview.postMessage(m));
@@ -169,6 +174,7 @@ class EmlEditorProvider {
 
 function activate(context) {
   rating = createRatingPrompt({ vscode, context, extensionId: 'zovo.eml-viewer', section: 'emlViewer', message: (n) => `EML Viewer has opened ${n} mail files for you. A rating helps other people find it.` });
+  registerSupport({ vscode, context, prefix: 'emlViewer', selfId: 'zovo.eml-viewer' });
   context.subscriptions.push(
     vscode.window.registerCustomEditorProvider(VIEW_TYPE, new EmlEditorProvider(context), {
       supportsMultipleEditorsPerDocument: true,

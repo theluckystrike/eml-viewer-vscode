@@ -61,14 +61,14 @@ async function waitFor(f, pred, ms = 5000) {
 
 test('activate registers the custom editor and the commands; manifest matches', () => {
   assert.equal(vscodeMock.window.registered[0][0], 'emlViewer.preview');
-  assert.deepEqual(vscodeMock.commands.list.sort(), ['emlViewer.openWalkthrough', 'emlViewer.openWith']);
+  assert.deepEqual(vscodeMock.commands.list.sort(), ['emlViewer.moreViewers', 'emlViewer.openWalkthrough', 'emlViewer.openWith', 'emlViewer.supportDeveloper']);
   const pkg = require('../package.json');
   assert.equal(pkg.contributes.customEditors[0].viewType, ext.VIEW_TYPE);
   assert.deepEqual(pkg.contributes.customEditors[0].selector.map(s => s.filenamePattern), ['*.eml', '*.emlx', '*.mbox', '*.mbx']);
   assert.ok(pkg.displayName.toLowerCase().startsWith('eml viewer') && pkg.displayName.length <= 45);
   assert.equal(pkg.keywords.length, 30);
   assert.equal(new Set(pkg.keywords).size, 30);
-  assert.equal(pkg.version, '0.1.0');
+  assert.equal(pkg.version, '0.1.1');
 });
 
 test('.eml: init then the parsed message; html set with images blocked', async () => {
@@ -214,4 +214,33 @@ test('rendered counts one success per tab; nothing is posted after close', async
   const n = f.sent.length;
   await f.send({ type: 'ready' });
   assert.equal(f.sent.length, n);
+});
+
+// ---------- support links (Sponsor, More free viewers) ----------
+test('support: package.json has the sponsor field, the two commands and the setting', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
+  const support = require('../src/support');
+  assert.equal(pkg.sponsor.url, 'https://github.com/sponsors/theluckystrike');
+  assert.equal(pkg.sponsor.url, support.sponsorUrl());
+  const ids = pkg.contributes.commands.map(c => c.command);
+  assert.ok(ids.includes('emlViewer.supportDeveloper') && ids.includes('emlViewer.moreViewers'));
+  const prop = [].concat(pkg.contributes.configuration).map(c => c.properties['emlViewer.showSupportLinks']).find(Boolean);
+  assert.equal(prop.default, true);
+  assert.ok(support.otherProducts('zovo.eml-viewer').every(p => p.id !== 'zovo.eml-viewer'));
+});
+
+test('support: the footer shows by default, emlViewer.showSupportLinks=false hides it, the CSP is unchanged', async () => {
+  try {
+    for (const [val, shown] of [[undefined, true], [false, false]]) {
+      if (val === undefined) delete state.config.showSupportLinks; else state.config.showSupportLinks = val;
+      const f = await open(path.join(tmp, 'newsletter.eml'));
+      const html = f.panel.webview.html;
+      assert.equal(/id="zovo-support"/.test(html), shown, String(val));
+      assert.equal(html.includes('command:emlViewer.supportDeveloper'), shown);
+      // the style-src keeps 'unsafe-inline' for message HTML: no nonce on styles
+      assert.match(html, /style-src https:\/\/csp 'unsafe-inline'; script-src 'nonce-/);
+      assert.deepEqual(f.panel.webview.options.enableCommandUris, ['emlViewer.supportDeveloper', 'emlViewer.moreViewers', 'workbench.action.openSettings']);
+      f.close();
+    }
+  } finally { delete state.config.showSupportLinks; }
 });

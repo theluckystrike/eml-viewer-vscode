@@ -32,8 +32,13 @@ const bar = h('div', { class: 'bar' }, titleEl, infoEl, h('span', { class: 'spac
 const listPane = h('div', { class: 'listpane', hidden: true });
 const msgPane = h('div', { class: 'msgpane' });
 const main = h('div', { class: 'main' }, listPane, msgPane);
-const status = h('div', { class: 'status' }, h('span', { class: 'stat-left' }), h('span', { class: 'stat-right muted' }));
-const setStatus = (l, r) => { if (l !== undefined) status.firstChild.textContent = l; if (r !== undefined) status.lastChild.textContent = r; };
+const statLeft = h('span', { class: 'stat-left' });
+const statRight = h('span', { class: 'stat-right muted' });
+const status = h('div', { class: 'status' }, statLeft, statRight);
+// The Sponsor and More free viewers line from the host HTML (absent when emlViewer.showSupportLinks is off).
+const supportLine = document.getElementById('zovo-support');
+if (supportLine) { supportLine.classList.remove('zovo-support-fixed'); status.append(supportLine); }
+const setStatus = (l, r) => { if (l !== undefined) statLeft.textContent = l; if (r !== undefined) statRight.textContent = r; };
 
 // ---------- MBOX list ----------
 const search = h('input', { type: 'search', placeholder: 'Search sender, recipient, subject', 'aria-label': 'Search messages' });

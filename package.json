@@ -1,8 +1,8 @@
 {
   "name": "eml-viewer",
   "displayName": "EML Viewer & MBOX Email Viewer",
-  "description": "Open .eml, .emlx and .mbox email files in VS Code: HTML with remote images blocked, attachments, SPF/DKIM/DMARC results and the delivery route. Offline.",
-  "version": "0.1.0",
+  "description": "Open .eml, .emlx and .mbox email files in VS Code. See the HTML with remote images blocked, attachments, SPF/DKIM/DMARC results and the delivery route. Offline.",
+  "version": "0.1.1",
   "publisher": "zovo",
   "license": "MIT",
   "icon": "icon.png",
@@ -90,6 +90,16 @@
         "command": "emlViewer.openWith",
         "title": "Open in EML Viewer",
         "category": "EML Viewer"
+      },
+      {
+        "command": "emlViewer.supportDeveloper",
+        "title": "Support the developer",
+        "category": "EML Viewer"
+      },
+      {
+        "command": "emlViewer.moreViewers",
+        "title": "More free viewers",
+        "category": "EML Viewer"
       }
     ],
     "menus": {
@@ -126,6 +136,11 @@
           "type": "boolean",
           "default": true,
           "description": "Ask one time for a Marketplace rating after you have used EML Viewer for a few days. You can answer \"Later\" or \"Don't ask again\". Nothing is sent anywhere."
+        },
+        "emlViewer.showSupportLinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the small Sponsor and More free viewers links in the status line of the viewer. The change shows in files you open next. Nothing is sent anywhere."
         }
       }
     },
@@ -187,5 +202,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/theluckystrike/eml-viewer-vscode"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/theluckystrike"
   }
 }

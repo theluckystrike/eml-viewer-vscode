@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 (2026-11-08)
+
+- The "More free viewers" list and the README now use the current Marketplace names and include the newest Zovo extensions: ZIP, GCode, EPUB, HAR, font and audio viewers.
+
 ## 0.1.4 (2026-11-07)
 
 - The Marketplace name is now "EML Viewer, Email Headers & MBOX Viewer" (it was "EML Viewer & MBOX Email Viewer"). The extension id, commands and settings stay the same.

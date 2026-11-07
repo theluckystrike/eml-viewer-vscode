@@ -2,7 +2,7 @@
   "name": "eml-viewer",
   "displayName": "EML Viewer & MBOX Email Viewer",
   "description": "Open .eml, .emlx and .mbox email files in VS Code. See the HTML with remote images blocked, attachments, SPF/DKIM/DMARC results and the delivery route. Offline.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "zovo",
   "license": "MIT",
   "icon": "icon.png",

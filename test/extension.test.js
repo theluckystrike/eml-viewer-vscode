@@ -68,7 +68,7 @@ test('activate registers the custom editor and the commands; manifest matches', 
   assert.ok(pkg.displayName.toLowerCase().startsWith('eml viewer') && pkg.displayName.length <= 45);
   assert.equal(pkg.keywords.length, 30);
   assert.equal(new Set(pkg.keywords).size, 30);
-  assert.equal(pkg.version, '0.1.1');
+  assert.match(pkg.version, /^\d+\.\d+\.\d+$/); // monetize.py rollouts bump it
 });
 
 test('.eml: init then the parsed message; html set with images blocked', async () => {

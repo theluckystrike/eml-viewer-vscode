@@ -1,4 +1,4 @@
-# EML Viewer & MBOX Email Viewer
+# EML Viewer, Email Headers & MBOX Viewer
 
 ![License MIT](https://img.shields.io/badge/license-MIT-blue)
 ![Works offline](https://img.shields.io/badge/network-none%20by%20default-green)

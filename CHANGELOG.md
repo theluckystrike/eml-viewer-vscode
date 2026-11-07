@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4 (2026-11-07)
+
+- The Marketplace name is now "EML Viewer, Email Headers & MBOX Viewer" (it was "EML Viewer & MBOX Email Viewer"). The extension id, commands and settings stay the same.
+
 ## 0.1.3 (2026-11-07)
 
 - The Marketplace description now starts with "EML viewer and email viewer for ".

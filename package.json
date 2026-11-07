@@ -1,8 +1,8 @@
 {
   "name": "eml-viewer",
-  "displayName": "EML Viewer & MBOX Email Viewer",
+  "displayName": "EML Viewer, Email Headers & MBOX Viewer",
   "description": "EML viewer and email viewer for .eml, .emlx and .mbox files in VS Code. See the HTML with remote images blocked, attachments, SPF/DKIM/DMARC results and the delivery route. Offline.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "publisher": "zovo",
   "license": "MIT",
   "icon": "icon.png",
